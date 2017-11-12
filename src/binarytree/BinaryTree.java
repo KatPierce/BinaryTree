@@ -86,9 +86,12 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         if (root == null)
             return false;
         else {
-            return remove(null, root, t);
-
-        }
+            if( remove(null, root, t)) {
+                size--;
+                return true;
+            }
+            else return false;
+        }        
     }    
    
     private boolean remove(Node<T> parent, Node<T> node, T value) {
@@ -196,7 +199,9 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         private BinaryTreeIterator() {}
 
         private Node<T> findNext() {
-            throw new UnsupportedOperationException();
+//            throw new UnsupportedOperationException();
+         return null;
+
         }
 
         @Override
