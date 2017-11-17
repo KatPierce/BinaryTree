@@ -98,65 +98,58 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         if (node == null)
             return false;
         int comparison = value.compareTo(node.value);
-        if (comparison == 0) {                                                         // remove node from parent            
+        if (comparison == 0) {
+            boolean notRoot = false;
+            boolean isLeftSubtree = false;
             if (parent != null) {
-                boolean isLeftSubtree = node.value.compareTo(parent.value) < 0;
-                if (node.left == null || node.right == null) {                          // is leaf or single child
-                    Node<T> replacement = node.left != null ? node.left : node.right;
+                notRoot = true;
+                isLeftSubtree = node.value.compareTo(parent.value) < 0;
+            }
+            if (node.left == null || node.right == null) {                          // is leaf or single child
+                Node<T> replacement = node.left != null ? node.left : node.right;
+                if (notRoot) {
                     if (isLeftSubtree)
                         parent.left = replacement;
                     else
                         parent.right = replacement;
-                    return true;
-                } else {
-                    Node<T> replacementNodeParent = node.left;
-                    if (replacementNodeParent.right != null) {                        //если есть, где искать max
-                        while (replacementNodeParent.right.right != null) {
-                            replacementNodeParent = replacementNodeParent.right;
-                        }
-                        Node<T> insertedNode = new Node<>(replacementNodeParent.right.value, node.left,node.right);
+                } else
+                    root = replacement;
+
+                return true;
+            } else {
+                Node<T> replacementNodeParent = node.left;
+                if (replacementNodeParent.right != null) {                        //если есть, где искать max
+                    while (replacementNodeParent.right.right != null) {
+                        replacementNodeParent = replacementNodeParent.right;
+                    }
+                    Node<T> insertedNode = new Node<>(replacementNodeParent.right.value, node.left, node.right);
+                    if (notRoot) {
                         if (isLeftSubtree)
                             parent.left = insertedNode;
                         else
                             parent.right = insertedNode;
+                    } else
+                        root = insertedNode;
+                    boolean isLeaf = (replacementNodeParent.right.left == null);
+                    if (isLeaf)
                         replacementNodeParent.right = null;
-                        return true;
-                    } else {
-                        Node<T> insertedNode = new Node(node.left.value, null, node.right);         
+                    else
+                        replacementNodeParent.right = new Node<>(replacementNodeParent.right.left.value, replacementNodeParent.right.left.left, null);
+                    return true;
+                } else {
+                    Node<T> insertedNode = new Node(node.left.value, null, node.right);
+                    if (notRoot) {
                         if (isLeftSubtree)
                             parent.left = insertedNode;
                         else
-                            parent.right = insertedNode;                       
-                        return true;
-                    }
-                }
+                            parent.right = insertedNode;
+                    } else
+                        root = insertedNode;
 
-            } else {                                            // we are deleting tree root
-                if (node.left == null || node.right == null) {    // is leaf or single child
-                    Node<T> replacement = node.left != null ? node.left : node.right;
-                    root = replacement;
                     return true;
-                } else {
-                    Node<T> replacementNodeParent = node.left;
-                    if (replacementNodeParent.right != null) {                        //если есть, где искать max
-                        while (replacementNodeParent.right.right != null) {
-                            replacementNodeParent = replacementNodeParent.right;
-                        }
-                        Node<T> insertedNode = new Node<>(replacementNodeParent.right.value, node.left,node.right);
-                        root = insertedNode;
-                        replacementNodeParent.right = null;
-                        return true;
-                    } else {
-                        Node<T> insertedNode = new Node(node.left.value, null, node.right); 
-                        root = insertedNode;
-                        return true;                                                   
-                        
-                    }
                 }
-
-
             }
-
+            
         } else
             return remove(node, comparison < 0 ? node.left : node.right, value);
 
@@ -276,5 +269,5 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
             current = current.right;
         }
         return current.value;
-    }   
+    }  
 }

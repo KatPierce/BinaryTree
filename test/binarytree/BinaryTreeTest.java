@@ -61,6 +61,23 @@ public class BinaryTreeTest {
         List<Integer> expList4 = Arrays.asList(2,1,0,4,3,6,5,7);
         expTree4.addAll(expList4);
         assertEquals(expTree4, tree4);
+        //remove with replacememt from leftSubtree
+        BinaryTree<Integer> tree5 = new BinaryTree<>();
+        List<Integer> list5 = Arrays.asList(71, 92, 1, 47, 28, 51, 31, 3, 69, 51, 90, 33, 64, 82, 92, 32, 83, 62, 76, 61);
+        tree5.addAll(list5);
+        tree5.remove(71);        
+        BinaryTree<Integer> expTree5 = new BinaryTree<>();
+        List<Integer> expList5 = Arrays.asList(92, 1, 47, 28, 51, 31, 3, 69, 51, 90, 33, 64, 82, 92, 32, 83, 62, 76, 61);
+        expTree5.addAll(expList5);
+        assertEquals(expTree5, tree5);
+        BinaryTree<Integer> tree6 = new BinaryTree<>();
+        List<Integer> list6 = Arrays.asList(7,4,9,3,6,8,10);
+        tree6.addAll(list6);
+        tree6.remove(7);        
+        BinaryTree<Integer> expTree6 = new BinaryTree<>();
+        List<Integer> expList6 = Arrays.asList(6,4,9,3,8,10);
+        expTree6.addAll(expList6);
+        assertEquals(expTree6, tree6);
     }
     
 }
